@@ -4,4 +4,4 @@
 
 * ait.manifest.jsonを参照
 
-test
+test2
