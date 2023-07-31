@@ -6,7 +6,6 @@ set INPUT_INVENTORY_ADD_FLAG=
 set INPUT_COMMIT_COMMENT=
 set COMMIT_ID=
 set REPO_URL=
-set HOME=C:\Users\wtnksan\.ssh
 
 choice /c YN /m "--- Step-1 Inventory upload? (Y:upload AN:not upload) : " /n
 if errorlevel 1 set INPUT_INVENTORY_ADD_FLAG=Y
@@ -32,6 +31,8 @@ if %INPUT_INVENTORY_ADD_FLAG%==Y (
 )
 
 git commit -m %INPUT_COMMIT_COMMENT%
+
+git remote set-url origin git@github.com:watanaka-yuichi/test_ait_2.git
 
 git push origin main
 
