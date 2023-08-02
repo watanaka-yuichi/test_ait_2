@@ -6,8 +6,10 @@ set INPUT_INVENTORY_ADD_FLAG=
 set INPUT_COMMIT_COMMENT=
 set COMMIT_ID=
 set REPO_URL=
+set REPO_NAME=
+set GITHUB_ACCOUNT=
 
-choice /c YN /m "--- Step-1 Inventory upload? (Y:upload AN:not upload) : " /n
+choice /c YN /m "--- Step-1 Inventory upload? (Y:upload N:not upload) : " /n
 if errorlevel 1 set INPUT_INVENTORY_ADD_FLAG=Y
 if errorlevel 2 set INPUT_INVENTORY_ADD_FLAG=N
 
@@ -21,6 +23,26 @@ echo Inputed commit comment : %INPUT_COMMIT_COMMENT%
 
 cd ..
 
+git remote get-url origin > repo_url.txt
+for /f "tokens=1" %%a in (repo_url.txt) do (
+  set REPO_URL=%%a
+)
+del repo_url.txt
+
+echo "%REPO_URL%" | find "https" >NUL
+if %errorlevel%==0 (
+  for /f "tokens=3-4 delims=/" %%a in ("%REPO_URL%") do (
+    set GITHUB_ACCOUNT=%%a
+    set REPO_NAME=%%b
+  )
+) else (
+  for /f "tokens=2-3 delims=:/" %%a in ("%REPO_URL%") do (
+    set GITHUB_ACCOUNT=%%a
+    set REPO_NAME=%%b
+ )
+ git remote set-url origin git@github.com:%GITHUB_ACCOUNT%/%REPO_NAME%.git
+)
+
 git add deploy
 git add develop
 git add tool
@@ -31,8 +53,6 @@ if %INPUT_INVENTORY_ADD_FLAG%==Y (
 )
 
 git commit -m %INPUT_COMMIT_COMMENT%
-
-git remote set-url origin git@github.com:watanaka-yuichi/test_ait_2.git
 
 git push origin main
 
@@ -46,15 +66,9 @@ for /f "tokens=1" %%a in (commit_id.txt) do (
 )
 del commit_id.txt
 
-
-git remote get-url origin > repo_url.txt
-for /f "tokens=1" %%b in (repo_url.txt) do (
-  set REPO_URL=%%b
-)
-del repo_url.txt
-
 echo ----------- Repository URL Start----------
-echo %REPO_URL:~0,-4%/tree/%COMMIT_ID%
+echo https://github.com/%GITHUB_ACCOUNT%/%REPO_NAME%/tree/%COMMIT_ID%
 echo ----------- Repository URL End-----------
+
 PAUSE
 EXIT
