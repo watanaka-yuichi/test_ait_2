@@ -38,7 +38,7 @@ if %errorlevel%==0 (
     set REPO_NAME=%%b
   )
 ) else (
-  for /f "tokens=2-3 delims=:/" %%a in ("%REPO_URL%") do (
+  for /f "tokens=2-3 delims=/" %%a in ("%REPO_URL%") do (
     set GITHUB_ACCOUNT=%%a
     set REPO_NAME=%%b
     echo "%GITHUB_ACCOUNT%"
