@@ -29,6 +29,8 @@ for /f "tokens=1" %%a in (repo_url.txt) do (
 )
 del repo_url.txt
 
+echo "%REPO_URL%"
+
 echo "%REPO_URL%" | find "https" >NUL
 if %errorlevel%==0 (
   for /f "tokens=3-4 delims=/" %%a in ("%REPO_URL%") do (
