@@ -40,7 +40,7 @@ if %errorlevel%==0 (
     set GITHUB_ACCOUNT=%%a
     set REPO_NAME=%%b
  )
- git remote set-url origin git@github.com:%GITHUB_ACCOUNT%/%REPO_NAME%.git
+ git remote set-url origin git@github.com:%GITHUB_ACCOUNT%/%REPO_NAME%
 )
 
 git add deploy
