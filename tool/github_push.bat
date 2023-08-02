@@ -41,8 +41,8 @@ if %errorlevel%==0 (
   for /f "tokens=2-3 delims=:/" %%a in ("%REPO_URL%") do (
     set GITHUB_ACCOUNT=%%a
     set REPO_NAME=%%b
-    echo %GITHUB_ACCOUNT%
-    echo %REPO_NAME%
+    echo "%GITHUB_ACCOUNT%"
+    echo "%REPO_NAME%"
  )
  git remote set-url origin git@github.com:%GITHUB_ACCOUNT%/%REPO_NAME%
 )
