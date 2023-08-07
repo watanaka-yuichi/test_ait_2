@@ -48,6 +48,7 @@ if %errorlevel%==0 (
 
 if %CLONE_TYPE%==S (
   git remote set-url origin git@github.com:%GITHUB_ACCOUNT%/%REPO_NAME%.git
+  echo ----------- aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa----------
 )
 
 git add deploy
