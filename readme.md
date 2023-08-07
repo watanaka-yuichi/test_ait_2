@@ -4,10 +4,5 @@
 
 * ait.manifest.jsonを参照
 
-test2
-
-
-
-
-
+test3
 
