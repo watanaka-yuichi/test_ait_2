@@ -8,6 +8,7 @@ set COMMIT_ID=
 set REPO_URL=
 set REPO_NAME=
 set GITHUB_ACCOUNT=
+set CLONE_TYPE=
 
 choice /c YN /m "--- Step-1 Inventory upload? (Y:upload N:not upload) : " /n
 if errorlevel 1 set INPUT_INVENTORY_ADD_FLAG=Y
@@ -29,22 +30,25 @@ for /f "tokens=1" %%a in (repo_url.txt) do (
 )
 del repo_url.txt
 
-echo "%REPO_URL%"
-
 echo "%REPO_URL%" | find "https" >NUL
 if %errorlevel%==0 (
-  for /f "tokens=3-4 delims=/" %%a in ("%REPO_URL%") do (
+  set CLONE_TYPE=H
+  for /f "tokens=3-4 delims=/" %%a in ("%REPO_URL:~0,-4%") do (
     set GITHUB_ACCOUNT=%%a
     set REPO_NAME=%%b
   )
 ) else (
-  for /f "tokens=2-3 delims=/" %%a in ("%REPO_URL%") do (
+  set CLONE_TYPE=S
+  for /f "tokens=2-3 delims=:/" %%a in ("%REPO_URL:~0,-4%") do (
     set GITHUB_ACCOUNT=%%a
     set REPO_NAME=%%b
-    echo "%GITHUB_ACCOUNT%"
-    echo "%REPO_NAME%"
  )
- git remote set-url origin git@github.com:%GITHUB_ACCOUNT%/%REPO_NAME%
+
+)
+
+if %CLONE_TYPE%==S (
+  git remote set-url origin git@github.com:%GITHUB_ACCOUNT%/%REPO_NAME%.git
+  git pull 
 )
 
 git add deploy
@@ -62,6 +66,8 @@ git push origin main
 
 if %errorlevel% neq 0 (
   echo Failed push to Github.
+  PAUSE
+  EXIT
 )
 
 git show --format="%%H" --no-patch > commit_id.txt
